@@ -1,5 +1,6 @@
 package com.coolweather.android;
 
+import android.content.Intent;
 import android.content.SharedPreferences;
 import android.graphics.Color;
 import android.os.Build;
@@ -106,7 +107,7 @@ public class WeatherActivity extends AppCompatActivity {
         //从SharedPreferences中读取缓存的背景图片
         String bingPic = prefs.getString("bing_pic",null);
         if (bingPic != null){
-            //如果有缓存的话就直接使用Glide莱家在这张图片
+            //如果有缓存的话就直接使用Glide加载在这张图片
             Glide.with(this).load(bingPic).into(bingPicImg);
         }else {
             //没有的话请求今日的必应背景图
@@ -239,8 +240,8 @@ public class WeatherActivity extends AppCompatActivity {
             minText.setText(forecast.temperature.min);
             forecastLayout.addView(view);
         }
-        if (weather != null){
-            aqiText.setText(weather.aqi.city.api);
+        if (weather.aqi != null){
+            aqiText.setText(weather.aqi.city.aqi);
             pm25Text.setText(weather.aqi.city.pm25);
         }
 
@@ -251,5 +252,7 @@ public class WeatherActivity extends AppCompatActivity {
         carWashText.setText(carwash);
         sportText.setText(sport);
         weatherLayout.setVisibility(View.VISIBLE);//将scrollview重新变为可见
+        Intent intent = new Intent(this, AutoUpdateService.class);//启动服务
+        startService(intent);
     }
 }
